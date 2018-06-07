@@ -1,5 +1,5 @@
 export const apiGatewayEventForTest = () => ({
-  path: '/step',
+  path: '/digest',
   resource: '/{proxy+}',
   queryStringParameters: {},
 
@@ -20,13 +20,42 @@ export const contextForTest = () => ({
   getRemainingTimeInMillis: () => 5997,
 });
 
-export function basicStepBody(withDescription = false) {
-  const step = {
-    adminTitle: 'test_step',
-    nudgeGroups: ['bb452ed0-0dc2-11e8-9c7e-6b4ba5a8daa6'], // actual group id in db atm
+export function basicdigestBody() {
+
+  const event = {
+
+    time: '12:13',
+
+    category: ‘physical’,
+
+    contentFormat: ‘static’,
+
+    displayType:’greeting’,
+
+    cardId: '31a9923b-9ee1-4e9e-a3d4-8f800fabce54',
+
+    action : dismiss’ ,
+
+    additional: {
+
+      view: null
+
+    }
+
   };
-  if (withDescription) {
-    step.description = 'testy test step full of nudge groups';
+
+  const digest = {
+
+      userId: 'a43a3de4-6a46-11e8-adc0-fa7ae01bbebc',
+
+      day: {
+
+        date: '7/6/2018',
+
+        events: [event] }
+
   }
-  return step;
+
+
+  return digest;
 }

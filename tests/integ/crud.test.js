@@ -3,28 +3,28 @@ import * as create from '../../create';
 import * as get from '../../get';
 import * as list from '../../list';
 import * as update from '../../update';
-import * as deleteStep from '../../delete';
-import { apiGatewayEventForTest, contextForTest, basicStepBody } from '../test-shared';
+
+import { apiGatewayEventForTest, contextForTest, basicdigestBody } from '../test-shared';
 
 const { isoStringRegex } = utilities;
 
-let stepId;
-const stepBody = basicStepBody();
-const updatedStepBody = basicStepBody(true);
-updatedStepBody.adminTitle = 'updated_test_step';
-updatedStepBody.description = 'updated step is updated';
+let digestId;
+const digestBody = basicdigestBody();
+const updateddigestBody = basicdigestBody(true);
+updateddigestBody.adminTitle = 'updated_test_digest';
+updateddigestBody.description = 'updated digest is updated';
 
 
-test('create step', async (done) => {
+test('create digest', async (done) => {
   console.log('create.');
 
   const event = apiGatewayEventForTest();
   event.httpMethod = 'POST';
-  event.body = JSON.stringify(stepBody);
+  event.body = JSON.stringify(digestBody);
 
   const context = contextForTest();
-  context.logGroupName = '/aws/lambda/step-service-dev-create';
-  context.functionName = 'step-service-dev-create';
+  context.logGroupName = '/aws/lambda/digest-prod-create';
+  context.functionName = 'digest-prod-create';
 
   const callback = (error, response) => {
     console.log(response);
@@ -33,37 +33,37 @@ test('create step', async (done) => {
     const responseBody = JSON.parse(response.body);
     expect(typeof responseBody.id).toBe('string');
     expect(typeof responseBody.createdAt).toBe('string');
-    stepId = responseBody.id;
-    Object.keys(stepBody).forEach((key) => {
+    digestId = responseBody.id;
+    Object.keys(digestBody).forEach((key) => {
       console.log(`key is checking: ${key}`);
       expect(responseBody[key]).toBeTruthy();
-      expect(responseBody[key]).toEqual(stepBody[key]);
+      expect(responseBody[key]).toEqual(digestBody[key]);
     });
     done();
   };
   await create.main(event, context, callback);
 });
 
-test('get created step', async (done) => {
+test('get created digest', async (done) => {
   console.log('get.');
   const event = apiGatewayEventForTest();
-  event.pathParameters = { id: stepId };
+  event.pathParameters = { id: digestId };
   event.httpMethod = 'GET';
   const context = contextForTest();
-  context.logGroupName = '/aws/lambda/step-service-dev-get';
-  context.functionName = 'step-service-dev-get';
+  context.logGroupName = '/aws/lambda/digest-prod-get';
+  context.functionName = 'digest-prod-get';
 
   const callback = (error, response) => {
     expect(response.statusCode).toEqual(200);
     expect(typeof response.body).toBe('string');
     const responseBody = JSON.parse(response.body);
-    expect(JSON.parse(response.body).id).toBe(stepId);
-    console.log('stepId checked.');
-    Object.keys(stepBody).forEach((key) => {
+    expect(JSON.parse(response.body).id).toBe(digestId);
+    console.log('digestId checked.');
+    Object.keys(digestBody).forEach((key) => {
       console.log(`key is checking: ${key}`);
       expect(responseBody[key]).toBeTruthy();
-      console.log(` equal checking: ${key}, value: ${stepBody[key]}`);
-      expect(responseBody[key]).toEqual(stepBody[key]);
+      console.log(` equal checking: ${key}, value: ${digestBody[key]}`);
+      expect(responseBody[key]).toEqual(digestBody[key]);
     });
     done();
   };
@@ -71,37 +71,46 @@ test('get created step', async (done) => {
   await get.main(event, context, callback);
 });
 
-test('list succeeds', async (done) => {
+/*test('list succeeds', async (done) => {
   console.log('list.');
   const event = apiGatewayEventForTest();
   event.httpMethod = 'GET';
 
   const context = contextForTest();
-  context.logGroupName = '/aws/lambda/nudge-group-service-dev-list';
-  context.functionName = 'nudge-group-service-dev-list';
+  context.logGroupName = '/aws/lambda/nudge-group-service-prod-list';
+  context.functionName = 'nudge-group-service-prod-list';
 
   const callback = (error, response) => {
     expect(response.statusCode).toEqual(200);
     expect(typeof response.body).toBe('string');
-    expect(typeof JSON.parse(response.body)[0].nudgeGroups).toBe('object');
-    expect(JSON.parse(response.body)[0].createdAt).toEqual(expect.stringMatching(isoStringRegex));
+    expect(typeof JSON.parse(response.body)[0].userId).toBe('uuid');
+    expect(typeof JSON.parse(response.body)[0].day).toBe('object');
+    expect(typeof JSON.parse(response.body)[0].day.date).toBe('date');
+    expect(typeof JSON.parse(response.body)[0].day.events).toBe('array');
+    expect(typeof JSON.parse(response.body)[0].day.events[0].time).toBe('string');
+    expect(typeof JSON.parse(response.body)[0].day.events[0].category).toBe('string');
+    expect(typeof JSON.parse(response.body)[0].day.events[0].contentFormat).toBe('string');
+    expect(typeof JSON.parse(response.body)[0].day.events[0].displayType).toBe('string');
+    expect(typeof JSON.parse(response.body)[0].day.events[0].cardId).toBe('uuid');
+    expect(typeof JSON.parse(response.body)[0].day.events[0].action).toBe('string');
+    expect(typeof JSON.parse(response.body)[0].day.events[0].additional).toBe('object');
     done();
   };
 
   await list.main(event, context, callback);
-});
+});*/
 
-test('update step content', async (done) => {
+test('update digest content', async (done) => {
   console.log('update.');
   const event = apiGatewayEventForTest();
-  event.pathParameters = { id: stepId };
+  event.pathParameters = { id: digestId };
   event.httpMethod = 'PUT';
-  event.body = JSON.stringify(updatedStepBody);
+  event.body = JSON.stringify(updateddigestBody);
 
-  event.pathParameters = { id: stepId };
+  event.pathParameters = { id: digestId };
   const context = contextForTest();
-  context.logGroupName = '/aws/lambda/step-service-dev-update';
-  context.functionName = 'step-service-dev-update';
+  context.logGroupName = '/aws/lambda/digest-prod-update';
+  context.functionName = 'digest-prod-update';
 
   const callback = (error, response) => {
     console.log(response);
@@ -113,24 +122,24 @@ test('update step content', async (done) => {
   await update.main(event, context, callback);
 });
 
-test('get updated step', async (done) => {
+test('get updated digest', async (done) => {
   console.log('get.');
   const event = apiGatewayEventForTest();
-  event.pathParameters = { id: stepId };
+  event.pathParameters = { id: digestId };
   event.httpMethod = 'GET';
   const context = contextForTest();
-  context.logGroupName = '/aws/lambda/step-service-dev-get';
-  context.functionName = 'step-service-dev-get';
+  context.logGroupName = '/aws/lambda/digest-prod-get';
+  context.functionName = 'digest-prod-get';
   const callback = (error, response) => {
     expect(response.statusCode).toEqual(200);
     expect(typeof response.body).toBe('string');
     const responseBody = JSON.parse(response.body);
-    expect(JSON.parse(response.body).id).toBe(stepId);
-    Object.keys(updatedStepBody).forEach((key) => {
+    expect(JSON.parse(response.body).id).toBe(digestId);
+    Object.keys(updateddigestBody).forEach((key) => {
       console.log(`key is checking: ${key}`);
       expect(responseBody[key]).toBeTruthy();
-      console.log(` equal checking: ${key}, value: ${stepBody[key]}`);
-      expect(responseBody[key]).toEqual(updatedStepBody[key]);
+      console.log(` equal checking: ${key}, value: ${digestBody[key]}`);
+      expect(responseBody[key]).toEqual(updateddigestBody[key]);
     });
     done();
   };
@@ -138,31 +147,15 @@ test('get updated step', async (done) => {
   await get.main(event, context, callback);
 });
 
-test('delete step', async (done) => {
-  console.log('delete.');
-  const event = apiGatewayEventForTest();
-  event.pathParameters = { id: stepId };
-  event.httpMethod = 'DELETE';
-  const context = contextForTest();
-  context.logGroupName = '/aws/lambda/step-service-dev-delete';
-  context.functionName = 'step-service-dev-delete';
 
-  const callback = (error, response) => {
-    expect(response.statusCode).toEqual(200);
-    done();
-  };
-
-  await deleteStep.main(event, context, callback);
-});
-
-test('get fails on deleted step', async (done) => {
+test('get fails on deleted digest', async (done) => {
   console.log('get.');
   const event = apiGatewayEventForTest();
-  event.pathParameters = { id: stepId };
+  event.pathParameters = { id: digestId };
   event.httpMethod = 'GET';
   const context = contextForTest();
-  context.logGroupName = '/aws/lambda/step-service-dev-get';
-  context.functionName = 'step-service-dev-get';
+  context.logGroupName = '/aws/lambda/digest-prod-get';
+  context.functionName = 'digest-prod-get';
 
   const callback = (error, response) => {
     expect(response.statusCode).toEqual(500);
