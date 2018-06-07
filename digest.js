@@ -48,9 +48,8 @@ function digest(){
 	  return vandium.types.object();
 	};	
 
-	//TODO: should this be a timestamp or a date RegEx? string?
 	var dateSchema = function dateSchema() {
-	  return vandium.types.string().min(8).max(10);
+	  return vandium.types.date();
 	};	
 
 	//TODO: should this be a timestamp or a time RegEx? string?
