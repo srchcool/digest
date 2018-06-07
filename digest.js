@@ -55,7 +55,7 @@ function digest(){
 
 	//TODO: should this be a timestamp or a time RegEx? string?
 	const timeSchema = ()=> {
-	  return vandium.types.string().min(2).max(4);
+	  return vandium.types.string().min(4).max(5);
 	};		
 
 	const categorySchema = ()=> {
