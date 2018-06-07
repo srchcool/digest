@@ -14,7 +14,8 @@ function digest(){
 
 		    date: [STRING],
 
-		    events: [ARRAY OF EVENT OBJECTS]}
+		    events: [ARRAY OF EVENT OBJECTS]
+		    }
 
   	}
 
@@ -40,40 +41,40 @@ function digest(){
 	**************************************************************/
 
 
-	var uuidSchema = function uuidSchema() {
+	const uuidSchema = ()=>{
 	  return vandium.types.uuid();
 	};
 
-	var objectSchema = function objectSchema() {
+	const objectSchema = ()=>{
 	  return vandium.types.object();
 	};	
 
-	var dateSchema = function dateSchema() {
+	const dateSchema = ()=> {
 	  return vandium.types.date();
 	};	
 
 	//TODO: should this be a timestamp or a time RegEx? string?
-	var timeSchema = function timeSchema() {
+	const timeSchema = ()=> {
 	  return vandium.types.string().min(2).max(4);
 	};		
 
-	var categorySchema = function descriptionSchema() {
+	const categorySchema = ()=> {
 	  return vandium.types.string().min(4).max(200);
 	};	
 
-	var contentFormatSchema = function contentFormatSchema() {
+	const contentFormatSchema = ()=> {
 	  return vandium.types.string().min(4).max(200);
 	};	
 
-	var displayTypeSchema = function displayTypeSchema() {
+	const displayTypeSchema = ()=> {
 	  return vandium.types.string().min(4).max(200);
 	};	
 
-	var actionSchema = function actionSchema() {
+	const actionSchema = ()=> {
 	  return vandium.types.string().min(4).max(200);
 	};	
 
-	var eventSchema = function eventSchema() {
+	const eventSchema = ()=> {
 		return( (0, objectSchema)().keys({
 			time: (0, timeSchema)().required(),
 			category: (0, categorySchema)().required(),
@@ -85,7 +86,7 @@ function digest(){
 		}) );
 	};
 
-	var daySchema = function daySchema() {
+	const daySchema = ()=> {
 	  return( (0, objectSchema)().keys({
 	    	date: (0, dateSchema)().required(),
 	    	events: vandium.types.array().items(
@@ -94,7 +95,7 @@ function digest(){
 	    }) ); 
 	};	
 
-	var digestValidationSchema = {
+	const digestValidationSchema = {
 		  body: {
 
 		    id: (0, uuidSchema)(), 
@@ -105,8 +106,8 @@ function digest(){
 		};
 
 	//TODO: What are the required keys?
-	var digestRequiredKeys = ['userId','day'];
-	var digestOptionalKeys = [];
+	const digestRequiredKeys = ['userId','day'];
+	const digestOptionalKeys = [];
 
 	return(
 	{
