@@ -75,22 +75,22 @@ function digest(){
 	};	
 
 	const eventSchema = ()=> {
-		return( (0, objectSchema)().keys({
-			time: (0, timeSchema)().required(),
-			category: (0, categorySchema)().required(),
-	    	contentFormat: (0, contentFormatSchema)().required(),
-	    	displayType: (0, displayTypeSchema)().required(),
-	    	cardId: (0, uuidSchema)().required(),
-	    	action : (0, actionSchema)().required(),
-	    	additional: (0, objectSchema)().required() //TODO any specs here?
+		return( objectSchema().keys({
+			time: timeSchema().required(),
+			category: categorySchema().required(),
+	    	contentFormat: contentFormatSchema().required(),
+	    	displayType: displayTypeSchema().required(),
+	    	cardId: uuidSchema().required(),
+	    	action : actionSchema().required(),
+	    	additional: objectSchema().required() //TODO any specs here?
 		}) );
 	};
 
 	const daySchema = ()=> {
-	  return( (0, objectSchema)().keys({
-	    	date: (0, dateSchema)().required(),
+	  return( objectSchema().keys({
+	    	date: dateSchema().required(),
 	    	events: vandium.types.array().items(
-	    		(0, eventSchema)().required()
+	    		eventSchema().required()
 	    	).required()
 	    }) ); 
 	};	
@@ -98,9 +98,9 @@ function digest(){
 	const digestValidationSchema = {
 		  body: {
 
-		    id: (0, uuidSchema)(), 
-		    userId: (0, uuidSchema)().required(),
-		    day: (0, daySchema)().required()
+		    id: uuidSchema(), 
+		    userId: uuidSchema().required(),
+		    day: daySchema().required()
 
 		  }
 		};
